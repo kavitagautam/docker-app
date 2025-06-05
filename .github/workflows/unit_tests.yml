@@ -1,0 +1,30 @@
+name: Run Angular Unit Test
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with: 
+          node-version: 22.15.0
+          cache: 'npm'
+          cache-dependency-path: ./package-lock.json
+      
+      - name: Run angular unit test
+        working-directory: src
+        run: |
+          npm ci
+          npm run test -- --watch=false --browsers=ChromeHeadless
